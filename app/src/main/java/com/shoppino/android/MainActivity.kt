@@ -16,23 +16,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 🎨 **SETUP SHOPPINO TOOLBAR**
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             title = "Shoppino"
             setDisplayHomeAsUpEnabled(false)
         }
 
-        // 🧭 **SETUP NAVIGATION**
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        // 🔽 **SETUP BOTTOM NAVIGATION**
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setupWithNavController(navController)
 
-        // 🎯 **NAVIGATION LISTENER FOR DYNAMIC TITLES**
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> {

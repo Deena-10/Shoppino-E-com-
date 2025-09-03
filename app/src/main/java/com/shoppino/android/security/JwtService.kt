@@ -18,7 +18,6 @@ object JwtService {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
     
-    // Token Management
     fun saveTokens(accessToken: String, refreshToken: String?) {
         prefs.edit()
             .putString(KEY_ACCESS_TOKEN, accessToken)
@@ -43,7 +42,6 @@ object JwtService {
             .apply()
     }
     
-    // User Information
     fun saveUserInfo(email: String, role: String) {
         prefs.edit()
             .putString(KEY_USER_EMAIL, email)
@@ -59,7 +57,6 @@ object JwtService {
         return prefs.getString(KEY_USER_ROLE, null)
     }
     
-    // Authentication Status
     fun isAuthenticated(): Boolean {
         return getAccessToken() != null
     }
@@ -68,9 +65,7 @@ object JwtService {
         return getUserRole() == "ADMIN"
     }
     
-    // Token Validation (Basic)
     fun isTokenExpired(token: String): Boolean {
-        // Basic validation - in production, you'd decode JWT and check expiration
         return token.isEmpty()
     }
 }

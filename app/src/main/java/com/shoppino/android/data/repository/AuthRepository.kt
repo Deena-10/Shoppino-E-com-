@@ -15,7 +15,6 @@ class AuthRepository(
         
         if (response.isSuccessful) {
             response.body()?.let { loginResponse ->
-                // Save tokens and user info
                 JwtService.saveTokens(loginResponse.accessToken, loginResponse.refreshToken)
                 JwtService.saveUserInfo(loginResponse.user.email, loginResponse.user.role)
             }
@@ -30,7 +29,6 @@ class AuthRepository(
         
         if (response.isSuccessful) {
             response.body()?.let { registerResponse ->
-                // Save tokens if provided
                 registerResponse.accessToken?.let { token ->
                     JwtService.saveTokens(token, null)
                     JwtService.saveUserInfo(registerResponse.user.email, registerResponse.user.role)
@@ -47,7 +45,6 @@ class AuthRepository(
         
         if (response.isSuccessful) {
             response.body()?.let { oauthResponse ->
-                // Save tokens and user info
                 JwtService.saveTokens(oauthResponse.accessToken, null)
                 JwtService.saveUserInfo(oauthResponse.user.email, oauthResponse.user.role)
             }
@@ -67,7 +64,6 @@ class AuthRepository(
         
         if (response.isSuccessful) {
             response.body()?.let { otpResponse ->
-                // Save token if provided
                 otpResponse.accessToken?.let { token ->
                     JwtService.saveTokens(token, null)
                 }
@@ -83,7 +79,6 @@ class AuthRepository(
             val response = apiService.refreshToken("Bearer $refreshToken")
             if (response.isSuccessful) {
                 response.body()?.let { loginResponse ->
-                    // Update tokens
                     JwtService.saveTokens(loginResponse.accessToken, loginResponse.refreshToken)
                 }
             }

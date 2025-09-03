@@ -46,8 +46,7 @@ class ProfileFragment : Fragment() {
     }
     
     private fun checkLoginStatus() {
-        // Check if user is logged in
-        val isLoggedIn = false // Get from SharedPreferences or local storage
+        val isLoggedIn = false
         if (isLoggedIn) {
             showProfileView()
         } else {
@@ -67,23 +66,18 @@ class ProfileFragment : Fragment() {
     }
     
     private fun showLoginDialog() {
-        // Show login dialog
     }
     
     private fun showRegisterDialog() {
-        // Show register dialog
     }
     
     private fun loadUserProfile() {
-        // Load user profile from API
     }
     
     private fun editProfile() {
-        // Navigate to edit profile
     }
     
     private fun logout() {
-        // Clear user session and show login view
         showLoginView()
     }
     

@@ -9,6 +9,6 @@ data class OrderItem(
     val productName: String,
     val quantity: Int,
     val price: Double,
-    val orderId: Long,  // FK to orders table
-    val productId: Long? = null  // Optional: link to product
+    val orderId: Long,
+    val productId: Long? = null
 )

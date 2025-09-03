@@ -34,7 +34,6 @@ class ProductRepository(
                 }
             }
         } catch (e: Exception) {
-            // Handle error
             e.printStackTrace()
         }
     }

@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit
 
 object NetworkConfig {
     
-    // Authentication interceptor to add JWT token to requests
     private val authInterceptor = Interceptor { chain ->
         val originalRequest = chain.request()
         val token = JwtService.getAccessToken()
@@ -32,7 +31,7 @@ object NetworkConfig {
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
-        .addInterceptor(authInterceptor)  // Add JWT token automatically
+        .addInterceptor(authInterceptor)
         .connectTimeout(DatabaseConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(DatabaseConfig.READ_TIMEOUT, TimeUnit.SECONDS)
         .writeTimeout(DatabaseConfig.WRITE_TIMEOUT, TimeUnit.SECONDS)

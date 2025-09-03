@@ -31,7 +31,6 @@ class CatalogFragment : Fragment() {
     
     private fun setupUI() {
         binding.rvProducts.layoutManager = GridLayoutManager(context, 2)
-        // Setup product adapter
     }
     
     private fun setupSearch() {
@@ -42,18 +41,15 @@ class CatalogFragment : Fragment() {
             }
             
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Implement real-time search if needed
                 return true
             }
         })
     }
     
     private fun searchProducts(query: String?) {
-        // Implement product search
     }
     
     private fun loadProducts() {
-        // Load products from API
     }
     
     override fun onDestroyView() {

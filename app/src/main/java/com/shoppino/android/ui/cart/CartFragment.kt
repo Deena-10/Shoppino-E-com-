@@ -31,34 +31,28 @@ class CartFragment : Fragment() {
     
     private fun setupUI() {
         binding.rvCartItems.layoutManager = LinearLayoutManager(context)
-        // Setup cart adapter
     }
     
     private fun loadCartItems() {
-        // Load cart items from local database or API
         updateTotalPrice()
     }
     
     private fun updateTotalPrice() {
-        // Calculate and display total price
         val total = calculateTotal()
         binding.tvTotalPrice.text = "$${String.format("%.2f", total)}"
     }
     
     private fun calculateTotal(): Double {
-        // Calculate total from cart items
         return 0.0
     }
     
     private fun setupCheckoutButton() {
         binding.btnCheckout.setOnClickListener {
-            // Navigate to checkout
             navigateToCheckout()
         }
     }
     
     private fun navigateToCheckout() {
-        // Implement navigation to checkout
     }
     
     override fun onDestroyView() {

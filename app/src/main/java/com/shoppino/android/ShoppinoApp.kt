@@ -15,7 +15,6 @@ class ShoppinoApp : Application() {
         super.onCreate()
         instance = this
         
-        // Initialize JWT service for authentication
         JwtService.init(this)
     }
     

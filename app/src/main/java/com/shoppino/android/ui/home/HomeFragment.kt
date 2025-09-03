@@ -30,14 +30,11 @@ class HomeFragment : Fragment() {
     }
     
     private fun setupUI() {
-        // Setup RecyclerViews and other UI components
         binding.rvFeaturedProducts.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvCategories.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
     
     private fun loadFeaturedProducts() {
-        // Load featured products from API
-        // This will be implemented with ViewModel
     }
     
     override fun onDestroyView() {

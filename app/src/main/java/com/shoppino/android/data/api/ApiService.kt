@@ -6,7 +6,6 @@ import retrofit2.http.*
 
 interface ApiService {
     
-    // 🔐 Authentication endpoints - match your Spring Boot security
     @POST("auth/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
     
@@ -25,7 +24,6 @@ interface ApiService {
     @POST("auth/refresh-token")
     suspend fun refreshToken(@Header("Authorization") refreshToken: String): Response<LoginResponse>
     
-    // Product endpoints - match your ProductController
     @GET("products")
     suspend fun getProducts(): Response<List<Product>>
     
@@ -41,7 +39,6 @@ interface ApiService {
     @GET("products/search-suggestions")
     suspend fun getSearchSuggestions(@Query("query") query: String): Response<List<String>>
     
-    // Cart endpoints - match your CartController
     @GET("cart")
     suspend fun getCartItems(): Response<List<CartItemDto>>
     
@@ -51,21 +48,18 @@ interface ApiService {
     @DELETE("cart/{productId}")
     suspend fun removeFromCart(@Path("productId") productId: Long): Response<Void>
     
-    // Order endpoints - match your OrderController
     @POST("orders/place")
     suspend fun placeOrder(@Body orderItems: List<OrderItemRequest>): Response<String>
     
     @GetMapping("orders/my")
     suspend fun getMyOrders(): Response<List<OrderDTO>>
     
-    // User endpoints - match your UserController
     @GET("user/profile")
     suspend fun getUserProfile(): Response<UserProfileDTO>
     
     @PUT("user/profile")
     suspend fun updateProfile(@Body profile: UserProfileDTO): Response<UserProfileDTO>
     
-    // Admin endpoints - require ADMIN role
     @PreAuthorize("hasRole('ADMIN')")
     @POST("products")
     suspend fun addProduct(@Body product: Product): Response<Product>
@@ -83,7 +77,6 @@ interface ApiService {
     suspend fun getAllOrders(): Response<List<OrderDTO>>
 }
 
-// Additional DTOs to match your Spring Boot backend
 data class OrderItemRequest(
     val productId: Long,
     val quantity: Int
