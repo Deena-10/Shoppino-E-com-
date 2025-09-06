@@ -30,23 +30,17 @@ class CatalogFragment : Fragment() {
     }
     
     private fun setupUI() {
-        binding.rvProducts.layoutManager = GridLayoutManager(context, 2)
+        binding.recyclerViewCatalog.layoutManager = GridLayoutManager(context, 2)
     }
     
     private fun setupSearch() {
-        binding.searchView.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchProducts(query)
-                return true
-            }
-            
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
+        binding.searchBar.setOnClickListener {
+            // Handle search bar click
+        }
     }
     
     private fun searchProducts(query: String?) {
+        // TODO: Implement product search functionality
     }
     
     private fun loadProducts() {

@@ -51,7 +51,7 @@ interface ApiService {
     @POST("orders/place")
     suspend fun placeOrder(@Body orderItems: List<OrderItemRequest>): Response<String>
     
-    @GetMapping("orders/my")
+    @GET("orders/my")
     suspend fun getMyOrders(): Response<List<OrderDTO>>
     
     @GET("user/profile")
@@ -60,19 +60,15 @@ interface ApiService {
     @PUT("user/profile")
     suspend fun updateProfile(@Body profile: UserProfileDTO): Response<UserProfileDTO>
     
-    @PreAuthorize("hasRole('ADMIN')")
     @POST("products")
     suspend fun addProduct(@Body product: Product): Response<Product>
     
-    @PreAuthorize("hasRole('ADMIN')")
     @PUT("products/{id}")
     suspend fun updateProduct(@Path("id") id: Long, @Body product: Product): Response<Product>
     
-    @PreAuthorize("hasRole('ADMIN')")
     @DELETE("products/{id}")
     suspend fun deleteProduct(@Path("id") id: Long): Response<String>
     
-    @PreAuthorize("hasRole('ADMIN')")
     @GET("orders/all")
     suspend fun getAllOrders(): Response<List<OrderDTO>>
 }

@@ -2,7 +2,7 @@ package com.shoppino.android.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
+import java.util.Date
 
 @Entity(tableName = "user")
 data class User(
@@ -16,5 +16,5 @@ data class User(
     val refreshToken: String? = null,
     val verified: Boolean = false,
     val verificationCode: String? = null,
-    val otpExpiryTime: LocalDateTime? = null
+    val otpExpiryTime: Date? = null
 )

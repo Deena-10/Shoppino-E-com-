@@ -38,7 +38,7 @@ class ProductRepository(
         }
     }
     
-    suspend fun getProductById(id: Int): Product? {
+    suspend fun getProductById(id: Long): Product? {
         return productDao.getProductById(id)
     }
     

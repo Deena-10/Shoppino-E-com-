@@ -9,6 +9,7 @@ import com.shoppino.android.data.model.User
 import com.shoppino.android.data.model.CartItem
 import com.shoppino.android.data.model.Order
 import com.shoppino.android.data.model.OrderItem
+import androidx.room.TypeConverters
 
 @Database(
     entities = [
@@ -21,6 +22,7 @@ import com.shoppino.android.data.model.OrderItem
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     
     abstract fun productDao(): ProductDao

@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
     
-    @Query("SELECT * FROM products")
+    @Query("SELECT * FROM product")
     fun getAllProducts(): Flow<List<Product>>
     
-    @Query("SELECT * FROM products WHERE category = :category")
+    @Query("SELECT * FROM product WHERE category = :category")
     fun getProductsByCategory(category: String): Flow<List<Product>>
     
-    @Query("SELECT * FROM products WHERE id = :id")
-    suspend fun getProductById(id: Int): Product?
+    @Query("SELECT * FROM product WHERE id = :id")
+    suspend fun getProductById(id: Long): Product?
     
-    @Query("SELECT * FROM products WHERE name LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM product WHERE name LIKE '%' || :query || '%'")
     fun searchProducts(query: String): Flow<List<Product>>
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -28,6 +28,6 @@ interface ProductDao {
     @Delete
     suspend fun deleteProduct(product: Product)
     
-    @Query("DELETE FROM products")
+    @Query("DELETE FROM product")
     suspend fun deleteAllProducts()
 }
