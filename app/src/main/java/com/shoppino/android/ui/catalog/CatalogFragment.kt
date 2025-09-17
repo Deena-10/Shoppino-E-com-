@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.shoppino.android.databinding.FragmentCatalogBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CatalogFragment : Fragment() {
     
     private var _binding: FragmentCatalogBinding? = null

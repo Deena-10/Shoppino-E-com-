@@ -27,4 +27,7 @@ interface OrderDao {
     
     @Query("DELETE FROM orders")
     suspend fun deleteAllOrders()
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrderItem(orderItem: com.shoppino.android.data.model.OrderItem)
 }

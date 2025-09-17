@@ -6,7 +6,7 @@
 
     <!-- Cart Items -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_cart_items"
+        android:id="@+id/rvCartItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

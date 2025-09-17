@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shoppino.android.R
 import com.shoppino.android.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     
     private var _binding: FragmentHomeBinding? = null

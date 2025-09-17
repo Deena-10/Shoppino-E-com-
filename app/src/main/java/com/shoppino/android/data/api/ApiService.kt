@@ -6,71 +6,113 @@ import retrofit2.http.*
 
 interface ApiService {
     
-    @POST("auth/login")
+    // Authentication Endpoints
+    @POST("api/auth/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
     
-    @POST("auth/register")
+    @POST("api/auth/signup")
     suspend fun register(@Body registerRequest: RegisterRequest): Response<RegisterResponse>
     
-    @POST("auth/google")
+    @POST("api/auth/firebase")
     suspend fun googleOAuth(@Body googleRequest: GoogleOAuthRequest): Response<OAuth2Response>
     
-    @POST("auth/forgot-password")
+    @POST("api/auth/forgot-password")
     suspend fun forgotPassword(@Body request: PasswordResetRequest): Response<Map<String, String>>
     
-    @POST("auth/verify-otp")
+    @POST("api/auth/verify")
     suspend fun verifyOtp(@Body request: OtpVerificationRequest): Response<OtpVerificationResponse>
     
-    @POST("auth/refresh-token")
-    suspend fun refreshToken(@Header("Authorization") refreshToken: String): Response<LoginResponse>
+    @POST("api/auth/refresh-token")
+    suspend fun refreshToken(@Body request: RefreshTokenRequest): Response<RefreshTokenResponse>
     
-    @GET("products")
+    // Product Endpoints
+    @GET("api/products")
     suspend fun getProducts(): Response<List<Product>>
     
-    @GET("products/{id}")
+    @GET("api/products/{id}")
     suspend fun getProductById(@Path("id") id: Long): Response<Product>
     
-    @GET("products/category/{category}")
+    @GET("api/products/category/{category}")
     suspend fun getProductsByCategory(@Path("category") category: String): Response<List<Product>>
     
-    @GET("products/search")
+    @GET("api/products/search")
     suspend fun searchProducts(@Query("query") query: String): Response<List<Product>>
     
-    @GET("products/search-suggestions")
+    @GET("api/products/search-suggestions")
     suspend fun getSearchSuggestions(@Query("query") query: String): Response<List<String>>
     
-    @GET("cart")
+    @POST("api/products/{id}/like")
+    suspend fun likeProduct(@Path("id") id: Long): Response<Map<String, String>>
+    
+    @DELETE("api/products/{id}/like")
+    suspend fun unlikeProduct(@Path("id") id: Long): Response<Map<String, String>>
+    
+    @GET("api/products/{id}/like-status")
+    suspend fun getLikeStatus(@Path("id") id: Long): Response<Map<String, Boolean>>
+    
+    // Cart Endpoints
+    @GET("api/cart")
     suspend fun getCartItems(): Response<List<CartItemDto>>
     
-    @POST("cart")
+    @POST("api/cart/add")
     suspend fun addToCart(@Body cartRequest: CartItemRequest): Response<Void>
     
-    @DELETE("cart/{productId}")
+    @PUT("api/cart/update")
+    suspend fun updateCartItem(@Body cartRequest: CartItemRequest): Response<Void>
+    
+    @DELETE("api/cart/remove")
     suspend fun removeFromCart(@Path("productId") productId: Long): Response<Void>
     
-    @POST("orders/place")
+    // Order Endpoints
+    @POST("api/orders/place")
     suspend fun placeOrder(@Body orderItems: List<OrderItemRequest>): Response<String>
     
-    @GET("orders/my")
+    @GET("api/orders/my")
     suspend fun getMyOrders(): Response<List<OrderDTO>>
     
-    @GET("user/profile")
+    @GET("api/orders/{id}")
+    suspend fun getOrderById(@Path("id") id: Long): Response<OrderDTO>
+    
+    // User Profile Endpoints
+    @GET("api/user/profile")
     suspend fun getUserProfile(): Response<UserProfileDTO>
     
-    @PUT("user/profile")
+    @PUT("api/user/profile")
     suspend fun updateProfile(@Body profile: UserProfileDTO): Response<UserProfileDTO>
     
-    @POST("products")
+    // Payment Endpoints
+    @POST("api/payment/create-order")
+    suspend fun createPaymentOrder(@Body request: PaymentOrderRequest): Response<PaymentOrderResponse>
+    
+    @POST("api/payment/verify")
+    suspend fun verifyPayment(@Body request: PaymentVerificationRequest): Response<PaymentVerificationResponse>
+    
+    @GET("api/payment/test")
+    suspend fun testPayment(): Response<Map<String, String>>
+    
+    @GET("api/payment/env-check")
+    suspend fun checkPaymentEnvironment(): Response<Map<String, String>>
+    
+    // Admin Endpoints
+    @POST("api/products")
     suspend fun addProduct(@Body product: Product): Response<Product>
     
-    @PUT("products/{id}")
+    @PUT("api/products/{id}")
     suspend fun updateProduct(@Path("id") id: Long, @Body product: Product): Response<Product>
     
-    @DELETE("products/{id}")
+    @DELETE("api/products/{id}")
     suspend fun deleteProduct(@Path("id") id: Long): Response<String>
     
-    @GET("orders/all")
+    @GET("api/orders/all")
     suspend fun getAllOrders(): Response<List<OrderDTO>>
+    
+    // User Profile
+    @PUT("api/user/profile")
+    suspend fun updateUserProfile(@Body profile: UserProfileDTO): Response<User>
+    
+    // Server Status
+    @GET("api/health")
+    suspend fun checkServerStatus(): Response<Map<String, String>>
 }
 
 data class OrderItemRequest(

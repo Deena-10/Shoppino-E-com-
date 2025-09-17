@@ -2,59 +2,104 @@ package com.shoppino.android.security
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.shoppino.android.data.model.User
+import com.google.gson.Gson
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object JwtService {
+@Singleton
+class JwtService @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
     
-    private const val PREFS_NAME = "ShoppinoPrefs"
-    private const val KEY_ACCESS_TOKEN = "access_token"
-    private const val KEY_REFRESH_TOKEN = "refresh_token"
-    private const val KEY_USER_EMAIL = "user_email"
-    private const val KEY_USER_ROLE = "user_role"
-    
-    private lateinit var prefs: SharedPreferences
-    
-    fun init(context: Context) {
-        prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    companion object {
+        private const val PREFS_NAME = "shoppino_secure_prefs"
+        private const val ACCESS_TOKEN_KEY = "access_token"
+        private const val REFRESH_TOKEN_KEY = "refresh_token"
+        private const val USER_KEY = "user"
+        private const val FIREBASE_TOKEN_KEY = "firebase_token"
+        private const val LAST_SYNC_KEY = "last_sync"
     }
+    
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
+    
+    private val prefs: SharedPreferences = EncryptedSharedPreferences.create(
+        context,
+        PREFS_NAME,
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+    
+    private val gson = Gson()
     
     fun saveTokens(accessToken: String, refreshToken: String?) {
         prefs.edit()
-            .putString(KEY_ACCESS_TOKEN, accessToken)
-            .putString(KEY_REFRESH_TOKEN, refreshToken)
+            .putString(ACCESS_TOKEN_KEY, accessToken)
+            .putString(REFRESH_TOKEN_KEY, refreshToken)
             .apply()
     }
     
     fun getAccessToken(): String? {
-        return prefs.getString(KEY_ACCESS_TOKEN, null)
+        return prefs.getString(ACCESS_TOKEN_KEY, null)
     }
     
     fun getRefreshToken(): String? {
-        return prefs.getString(KEY_REFRESH_TOKEN, null)
+        return prefs.getString(REFRESH_TOKEN_KEY, null)
+    }
+    
+    fun saveUser(user: User) {
+        val userJson = gson.toJson(user)
+        prefs.edit()
+            .putString(USER_KEY, userJson)
+            .apply()
+    }
+    
+    fun getUser(): User? {
+        val userJson = prefs.getString(USER_KEY, null)
+        return if (userJson != null) {
+            try {
+                gson.fromJson(userJson, User::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        } else {
+            null
+        }
+    }
+    
+    fun saveFirebaseToken(token: String) {
+        prefs.edit()
+            .putString(FIREBASE_TOKEN_KEY, token)
+            .apply()
+    }
+    
+    fun getFirebaseToken(): String? {
+        return prefs.getString(FIREBASE_TOKEN_KEY, null)
+    }
+    
+    fun saveLastSyncTime(timestamp: Long) {
+        prefs.edit()
+            .putLong(LAST_SYNC_KEY, timestamp)
+            .apply()
+    }
+    
+    fun getLastSyncTime(): Long {
+        return prefs.getLong(LAST_SYNC_KEY, 0L)
     }
     
     fun clearTokens() {
         prefs.edit()
-            .remove(KEY_ACCESS_TOKEN)
-            .remove(KEY_REFRESH_TOKEN)
-            .remove(KEY_USER_EMAIL)
-            .remove(KEY_USER_ROLE)
+            .remove(ACCESS_TOKEN_KEY)
+            .remove(REFRESH_TOKEN_KEY)
+            .remove(USER_KEY)
+            .remove(FIREBASE_TOKEN_KEY)
             .apply()
-    }
-    
-    fun saveUserInfo(email: String, role: String) {
-        prefs.edit()
-            .putString(KEY_USER_EMAIL, email)
-            .putString(KEY_USER_ROLE, role)
-            .apply()
-    }
-    
-    fun getUserEmail(): String? {
-        return prefs.getString(KEY_USER_EMAIL, null)
-    }
-    
-    fun getUserRole(): String? {
-        return prefs.getString(KEY_USER_ROLE, null)
     }
     
     fun isAuthenticated(): Boolean {
@@ -62,10 +107,27 @@ object JwtService {
     }
     
     fun isAdmin(): Boolean {
-        return getUserRole() == "ADMIN"
+        return getUser()?.role == "ADMIN"
     }
     
-    fun isTokenExpired(token: String): Boolean {
-        return token.isEmpty()
+    fun isTokenExpired(): Boolean {
+        val token = getAccessToken()
+        return if (token != null) {
+            try {
+                // Simple JWT expiration check (in production, use proper JWT library)
+                val payload = token.split(".")[1]
+                val decoded = String(android.util.Base64.decode(payload, android.util.Base64.URL_SAFE))
+                val json = gson.fromJson(decoded, Map::class.java)
+                val exp = json["exp"] as? Number
+                exp?.let { 
+                    val expirationTime = it.toLong() * 1000 // Convert to milliseconds
+                    System.currentTimeMillis() > expirationTime
+                } ?: true
+            } catch (e: Exception) {
+                true
+            }
+        } else {
+            true
+        }
     }
 }

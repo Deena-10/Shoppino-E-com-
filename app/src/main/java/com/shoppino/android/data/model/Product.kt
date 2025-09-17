@@ -2,8 +2,11 @@ package com.shoppino.android.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "product")
+@Entity(tableName = "products")
+@Parcelize
 data class Product(
     @PrimaryKey val id: Long,
     val name: String,
@@ -13,5 +16,6 @@ data class Product(
     val stock: Int,
     val price: Double,
     val category: String,
-    val deleted: Boolean = false
-)
+    val deleted: Boolean = false,
+    val isLiked: Boolean = false
+) : Parcelable
